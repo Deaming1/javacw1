@@ -9,61 +9,68 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-  private int Num;
-  private String word;
-  private List<String> str = new ArrayList<>();
+  private int Num;// Game number
+  private String target;//string for word
+  private List<String> str = new ArrayList<>();//The array of string to record the result of every guesses
   // TODO: Implement constructor with String parameter
+  // To start today's game
+  // set the start data as 2022/4/1
+  // and the number of the word is the difference value of current date and start date
+  // This function will get the word and number
   public Game(String file) throws IOException{
-    LocalDate today = LocalDate.now();
-    LocalDate start_date = LocalDate.of(2022, 4, 1);
-    Period between_days = Period.between(start_date, today);
-    int Number = between_days.getDays();
-    WordList word_today = new WordList(file);
-    word = word_today.getWord(Number);
+    LocalDate Today = LocalDate.now();
+    LocalDate Start_date = LocalDate.of(2022, 4, 1);
+    Period Between_days = Period.between(Start_date, Today);
+    int Number = Between_days.getDays();
+    WordList Word_today = new WordList(file);
+    target = Word_today.getWord(Number);
     this.Num = Number;
   }
 
   // TODO: Implement constructor with int and String parameters
+  // set the number equals to the users' input
+  // select the word from wordList read from the datafile
   public Game(int num, String file) throws IOException{
     Num = num;
     WordList word_specific = new WordList(file);
-    word = word_specific.getWord(Num);
+    target = word_specific.getWord(Num);
   }
 
   // TODO: Implement play() method
   void play(){
-    System.out.println(word);
-    int i;
-    boolean symbol = false;
-    System.out.println("WORDLE"+" "+String.format("%d",Num));
-    System.out.println();
-    for( i = 1; i <= 6; i++){
-      Guess guess = new Guess(i);
-      System.out.print(String.format("Enter guess (%d/6): ", i));
-      guess.readFromPlayer();
-      str.add(guess.compareWith(word));
-      System.out.println(guess.compareWith(word));
-      if(guess.matches(word)){
+    System.out.println(target); // for test
+    boolean symbol = false;  // check the match
+    System.out.printf("WORDLE\t%d\n",Num);
+    int n;
+    for(n = 1; n <= 6; n++){
+      Guess game = new Guess(n);
+      System.out.printf("Enter guess (%d/6): \n", n);
+      game.readFromPlayer();
+      str.add(game.compareWith(target));
+      System.out.println(game.compareWith(target));
+      if(game.matches(target)){
         symbol = true;
         break;
       }
     }
-    if(symbol == true && i == 1){
+    //some outputs
+    if(symbol && n == 1){
         System.out.println("Superb - Got it in one!");
     }
-    if(symbol == true && i > 1 && i < 6){
+    if(symbol && n > 1 && n < 6){
       System.out.println("Well done!");
   }
-    if(symbol == true && i == 6){
+    if(symbol && n == 6){
       System.out.println("That was a close call!");
   }
-    if(symbol == false){
+    if(!symbol){
       System.out.println("Nope - Better luck next time!");
     }
 
   }
 
   // TODO: Implement save() method, with a String parameter
+  // save the last game solution
   void save(String file) throws FileNotFoundException{
     PrintWriter savefile = new PrintWriter(file);
     int i;

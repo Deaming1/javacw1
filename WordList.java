@@ -7,12 +7,12 @@ import java.nio.file.Paths;
 
 
 public class WordList {
-  private List<String> words;
+  private List<String> words;//the array to get a list of words from file
 
 
   // TODO: Implement constructor with a String parameter
-  public WordList(String filename) throws IOException{
-    this.words = Files.readAllLines(Paths.get(filename));
+  public WordList(String file) throws IOException{
+    this.words = Files.readAllLines(Paths.get(file));
 
   }
 
